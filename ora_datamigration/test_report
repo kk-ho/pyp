@@ -1,0 +1,23 @@
+#-*-coding:utf-8 -*-
+一健导出导入的测试
+ID1:
+action:
+  源：bst   构建kk schema   创建kk 和 kkinx 表空间      将cbs.dealer 转存到kk 下. index 转存在kkinx下
+  目的:dbatest01  导入，不产生任何remap导入
+result:
+  基本是通的。但是欠缺一些输入参数的有效性检查，还需要优化
+
+ID2
+用例：
+    源：bst   构建kk schema   创建kk 表空间但由多个文件组成 将cbs.dealer 转存到kk 下. index 转存在kk下
+    目的:dbatest01  导入，不产生任何remap导入验证通过。
+结果：一般的有效性检查，已经添加上去。
+
+ID3
+用例:
+  源：bst   构建kk schema   创建kk 表空间但由多个文件组成 将cbs.dealer 转存到kk 下. index 转存在kk下
+  目的:dbatest01  导入到schema kk01
+结果：  
+  进行了一些异常输入测试。 基本通过。
+  remap schema kk ->kk01通过
+  
