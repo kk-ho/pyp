@@ -1,0 +1,111 @@
+#-*-coding:utf-8-*-
+from __future__ import division
+'''
+coder:mars ho
+date:2017-03-23
+function: calculate 24point with fourt poker cards
+
+'''
+
+
+def calc24(a,b,c,d):
+    l1=[]
+    l2=[]
+    l3=["+","-","*","/"]
+    l1.append(a)
+    l1.append(b)
+    l1.append(c)
+    l1.append(d)
+    resloved=0
+    for i in range(4):
+        #print(l1)
+        for j in range(4):
+            e2=l1[1]
+            l1.pop(1)
+            l1.append(e2)
+            #print(l1[0])
+            l2.append((l1[0], l1[1], l1[2], l1[3]))
+            #print(l2)
+        e1 = l1[0]
+        l1.pop(0)
+        l1.append(e1)
+        #print(l1)
+    #print(l2)
+    result1=0
+    result2= 0
+    result3= 0
+    calc_express=""
+    for e in l2:
+        for s1 in l3:
+            for s2 in l3:
+                for s3 in l3:
+                    calc_express1=str(e[0])+s1+str(e[1])+s2+str(e[2])+s3+str(e[3])
+                    calc_express2 ='('+ str(e[0]) + s1 + str(e[1]) +')'+ s2 + str(e[2]) + s3 + str(e[3])
+                    calc_express3= '('+str(e[0]) + s1 + str(e[1]) + s2 + str(e[2]) +')'+ s3 + str(e[3])
+                    result1=eval(calc_express1)
+                    result2 = eval(calc_express2)
+                    result3 = eval(calc_express3)
+                    #print(calc_express)
+                    if result1==24 :
+                       print(calc_express1+"="+str(result1))
+                       resloved=1
+                       #exit()
+                    elif result2==24:
+                        print(calc_express2 + "=" + str(result2))
+                        resloved = 1
+                        #exit()
+                    elif result3==24:
+                        print(calc_express3 + "=" + str(result3))
+                        resloved = 1
+                        #exit()
+
+    if resloved==0:
+        print("无解".decode("utf-8"))
+
+if __name__=='__main__':
+    while 1==1 :
+        point1=raw_input("pls input the point of the first card:")
+        point2=raw_input("pls input the point of the second card:")
+        point3=raw_input("pls input the point of the third card:")
+        point4=raw_input("pls input the point of the fourth card:")
+        while ((point1.isdigit()<> True) or (point2.isdigit()<> True) or (point3.isdigit()<> True) or (point4.isdigit()<> True))\
+                or((int(point1)>=14) and (int(point2)>=14) and (int(point3)>=14) and (int(point4)>=14)):
+            if point1.isdigit()<>True:
+                print("the first card point is not digit!")
+                point1 = raw_input("pls input the point of the first card:")
+
+            if point2.isdigit()<>True:
+                print("the second card point is not digit!")
+                point2 = raw_input("pls input the point of the second card:")
+
+            if point3.isdigit() <> True:
+                print("the third card point is not digit!")
+                point3 = raw_input("pls input the point of the third card:")
+
+            if point4.isdigit()<>True:
+                print("the fourth card point is not digit!")
+                point4 = raw_input("pls input the point of the fourth card:")
+
+            if int(point1) >= 14:
+                print("the first card more than 13")
+                point1 = raw_input("pls input the point of the first card:")
+
+            if int(point2) >= 14:
+                print("the first card more than 13")
+                point2 = raw_input("pls input the point of the second card:")
+
+            if int(point3) >= 14:
+                print("the third card more than 13")
+                point3 = raw_input("pls input the point of the third card:")
+
+            if int(point4) >= 14:
+                print("the fourth card more than 13")
+                point4 = raw_input("pls input the point of the fourth card:")
+
+        point1 = int(point1)
+        point2 = int(point2)
+        point3 = int(point3)
+        point4 = int(point4)
+
+        calc24(point1,point2,point3,point4)
+
