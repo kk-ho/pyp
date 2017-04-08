@@ -1,0 +1,89 @@
+#-*-coding:utf-8 -*-
+'''
+creator:Mars Ho
+created date:2017-04-08
+获取封面作品的所有图片
+实现思路：
+1.识别出封面作品集，
+2.点击打开作品集
+3.当作品集下载完成后，下载图片
+技术实现：
+1.先研分析封面作品集的html元素，判断出集品集是放在那个元素下
+1.1 <div class="img-box">
+      <a href="http://photo.poco.cn/lastphoto-htx-id-5570754-p-0.xhtml" target="_blank" title="百般红紫斗芳菲">
+1.2 打开作品集后，发现jpg图片都是存储在如下格式下：
+      <img title="梦回_4" data-photo-item-id="223088169" item="223088169" role="playLivephoto" src="http://www.poco.cn/css_common/v3/images/img_loading.gif" data-lazyload-img-src="http://image18-c.poco.cn/mypoco/myphoto/20170402/23/5439720170402231558067_640.jpg?900x1350_120" data_org_bimg ="http://image18-c.poco.cn/mypoco/myphoto/20170402/23/5439720170402231558067.jpg?900x1350_120" data_img_small="http://image18-c.poco.cn/mypoco/myphoto/20170402/23/5439720170402231558067_640.jpg?900x1350_120" class="photo-item" onload="if(Sys.ie6)resize_img
+					  (this,994,100000)"/>
+2.通过beautifulsoup读取这些元素的值
+      html_format=BeautifulSoup(格式集,'html5lib')
+      tagset=html_format.find_all(html tag) ;返回找到的所有tag的结果集
+      访问方法:
+      for tag in tagset:
+        tag["tag属性"][-1]  返回tag属性值
+3.用urllib2打开作品集
+     urllib2.urlopen(url) 返回url的格式集
+4.发现作品图片，并下载另存为
+     urllib.urlretrieve(url,save path)
+5.通过以上方法的组合，我们批量下载到你想要的图片
+'''
+import urllib2
+import urllib
+from bs4 import BeautifulSoup
+
+def get_url(input_url):
+    url_set=[]
+    url=urllib2.urlopen(input_url)
+    html=BeautifulSoup(url.read(),'html5lib')
+    div=html.find_all('div')
+    for i in div:
+       try:
+            #print(i["class"][0])
+            if i["class"][0]=="img-box":
+                #print (i.a["href"])
+                url_set.append(i.a["href"])
+       except Exception as e:
+           pass
+    return url_set
+
+def open_url(urlset,save_path):
+    file_no=0
+    img_path=""
+    for i in urlset:
+        html=urllib2.urlopen(i)
+        print("opening")
+        print(i)
+        html_format=BeautifulSoup(html.read(),"html5lib")
+        imgset=html_format.find_all("img")
+        #print (imgset)
+        #break
+        for img in imgset:
+            try:
+                #print(img["data-lazyload-img-src"][0:-1])
+                file_no=file_no+1
+                #print(img["data-original"])
+                #print(img)
+                #print(img["data-original"])
+                #print(img[0])
+                #img_path = ""
+                img_path=img["data_org_bimg"][0:-1]
+                #print(type(img_path))
+                #print(len(img_path))
+                #print(img_path)
+                #file_path="d:\poco\model\\b".decode("utf-8") + str(file_no) + ".jpg"
+                file_name=img_path[img_path.find(".jpg")-5:img_path.find(".jpg")+4]
+                #print(file_name)
+                #file_path="d:\poco\model\\".decode("utf-8")+file_name
+                file_path=save_path+file_name
+                print(file_path)
+                try:
+                   urllib.urlretrieve(img_path,file_path)
+                except Exception as e:
+                    print(e)
+            except Exception as e:
+                pass
+                #print(e)
+               # print("error")
+
+if __name__=='__main__':
+    urlset=get_url("http://photo.poco.cn/vision.htx&p=12&index_type=hot&tid=-1&gid=0#list")
+    open_url(urlset,"d:\poco\model\\")
